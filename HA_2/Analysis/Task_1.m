@@ -1,7 +1,7 @@
 clear all; close all;
-Task = 'd';
+Task = 'f';
 
-N = 700;
+N = 20;
 k = 11;
 
 A = 1;
@@ -15,7 +15,7 @@ P_0 = 6;
 
 X = genLinearStateSequence(x_0, P_0, A, Q, N);
 Y = genLinearMeasurementSequence(X, H, R);
-[Xhat, P] = kalmanFilter(Y, x_0, P_0, A, Q, H, R);
+[Xhat, P, v] = kalmanFilter(Y, x_0, P_0, A, Q, H, R);
 
 switch Task
     case {'a'}
@@ -72,5 +72,15 @@ switch Task
         plot(z,Xpdf)
         hold all
         histogram(Xerror,'Normalization','pdf')
-        legend('Xpdf','hist Error')        
+        legend('Xpdf','hist Error')
+        
+        figure(2)
+        autocorr(v)
+    case {'f'}
+        [Xhat_Inc, P_Inc] = kalmanFilter(Y, 10, P_0, A, Q, H, R);
+        plot(Xhat, 'b')
+        hold all
+        plot(Xhat_Inc, 'r--')
+        plot(X(:,2:end), 'k')
+        legend('Kalman Correct', 'Kalman Incorrect', 'State sequence')
 end

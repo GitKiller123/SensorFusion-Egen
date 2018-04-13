@@ -1,4 +1,4 @@
-function [x, P] = linearUpdate(x, P, y, H, R)
+function [x, P, v] = linearUpdate(x, P, y, H, R)
 %LINEARPREDICTION calculates mean and covariance of predicted state
 %   density using a linear Gaussian model.
 %

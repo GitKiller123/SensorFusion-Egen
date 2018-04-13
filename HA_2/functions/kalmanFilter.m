@@ -1,4 +1,4 @@
-function [x, P] = kalmanFilter(Y, x_0, P_0, A, Q, H, R)
+function [x, P, v] = kalmanFilter(Y, x_0, P_0, A, Q, H, R)
 %KALMANFILTER Filters measurements sequence Y using a Kalman filter. 
 %
 %Input:
@@ -29,9 +29,10 @@ x = zeros(n,N);
 P = zeros(n,n,N);
 for k = 1:N
     [x_temp, P_temp] = linearPrediction(x_temp, P_temp, A, Q);
-    [x_temp, P_temp] = linearUpdate(x_temp, P_temp, Y(:,k), H, R);
+    [x_temp, P_temp, v_temp] = linearUpdate(x_temp, P_temp, Y(:,k), H, R);
     x(:,k) = x_temp;
-    P(:,:,k) = P_temp;    
+    P(:,:,k) = P_temp;
+    v(:,k) = v_temp;
 end
    
 end
