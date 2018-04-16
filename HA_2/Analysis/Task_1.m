@@ -1,5 +1,5 @@
 clear all; close all;
-Task = 'f';
+Task = 'b';
 
 N = 20;
 k = 11;
@@ -19,40 +19,44 @@ Y = genLinearMeasurementSequence(X, H, R);
 
 switch Task
     case {'a'}
-        plot(X(:,2:end), 'k')
+        plot(X(:,2:end), 'b')
         hold all
         plot(Y, 'r*')
         plot(X(:,2:end)+3*sqrt(R), 'b--')
         plot(X(:,2:end)-3*sqrt(R), 'b--')
-        legend('State sequence', 'Measurement', '3sigma')
+        legend('State sequence', 'Measurement', '3-Sigma')
+        xlabel('Sample Number')
+        ylabel('Value')
     case {'b'}
-        plot(Xhat, 'b')
+        plot(0:N, X, 'b')
         hold all
-        plot(X(:,2:end), 'k')
+        plot(0:N, [x_0 Xhat], 'k')
         plot(Y, 'r*')
-        plot(Xhat+3*sqrt(R), 'b--')
-        plot(Xhat-3*sqrt(R), 'b--')
-        legend('Kalman', 'State sequence', 'Measurement', '3sigma')
+        plot(0:N, [x_0+3*sqrt(P_0) Xhat+3*sqrt(P(:)')], 'b--')
+        plot(0:N, [x_0-3*sqrt(P_0) Xhat-3*sqrt(P(:)')], 'b--')
+        legend('State sequence', 'Kalman', 'Measurement', '3-Sigma')
+        xlabel('Sample Number')
+        ylabel('Value')
         z = [min([Xhat(4) Xhat(9) Xhat(15)]) - 6:0.01:max([Xhat(4) Xhat(9) Xhat(15)]) + 6];
         XhatPdf_1 = normpdf(z, Xhat(:,4), P(:,:,4));
         XhatPdf_2 = normpdf(z, Xhat(:,9), P(:,:,9));
         XhatPdf_3 = normpdf(z, Xhat(:,15), P(:,:,15));
         figure(2)
         subplot(3,1,1)
-        plot(z, XhatPdf_1)
+        plot([X(:,5) X(:,5)], [0 0.5],'b')
         hold all
-        plot([X(:,5) X(:,5)], [0 0.5],'k')
-        legend('Posterior density', 'True state')
+        plot(z, XhatPdf_1, 'k')
+        legend('True state', 'Posterior density')
         subplot(3,1,2)
-        plot(z, XhatPdf_2)
+        plot([X(:,10) X(:,10)], [0 0.5],'b')
         hold all
-        plot([X(:,10) X(:,10)], [0 0.5],'k')
-        legend('Posterior density', 'True state')
+        plot(z, XhatPdf_2, 'k')
+        legend('True state', 'Posterior density')
         subplot(3,1,3)
-        plot(z, XhatPdf_3)
+        plot([X(:,15) X(:,15)], [0 0.5],'b')
         hold all
-        plot([X(:,15) X(:,15)], [0 0.5],'k')
-        legend('Posterior density', 'True state')
+        plot(z, XhatPdf_3, 'k')
+        legend('True state', 'Posterior density')
     case {'c'}
         z = [min([Xhat(k-1) Xhat(k)])-8:0.01:max([Xhat(k-1) Xhat(k)])+8];
         xpdf_1 = normpdf(z,Xhat(k-1),P(:,:,k-1));
@@ -75,7 +79,7 @@ switch Task
         legend('Xpdf','hist Error')
         
         figure(2)
-        autocorr(v)
+        autocorr(v,N-1)
     case {'f'}
         [Xhat_Inc, P_Inc] = kalmanFilter(Y, 10, P_0, A, Q, H, R);
         plot(Xhat, 'b')
