@@ -1,5 +1,5 @@
 clear all; close all;
-Task = 'b';
+Task = 'f';
 
 N = 20;
 k = 11;
@@ -61,9 +61,11 @@ switch Task
         plot([Y(:,14) Y(:,14)], [0 0.5],'r--')
         legend('True state', 'Posterior density', 'Measurement')
         figure(3)
-        hist(X-[x_0 Xhat])
+        Xerror = X(:,2:end) - Xhat;
+        plot(Xerror,'.')
         hold all
-        plot(0:N, [3*sqrt(cov(X,[x_0 Xhat])) 3*sqrt(cov(X,[x_0 Xhat]))])
+        plot([0 N], [3*sqrt(cov(Xerror)) 3*sqrt(cov(Xerror))])
+        legend('Estimation error', '3-Sigma error')
     case {'c'}
         z = [min([Xhat(k-1) Xhat(k)])-8:0.01:max([Xhat(k-1) Xhat(k)])+8];
         xpdf_1 = normpdf(z,Xhat(k-1),P(:,:,k-1));
@@ -84,15 +86,17 @@ switch Task
         plot(z,Xpdf)
         hold all
         histogram(Xerror,'Normalization','pdf')
-        legend('Xpdf','hist Error')
+        legend('X_{hat}','X_{error}')
         
         figure(2)
         autocorr(v,N-1)
     case {'f'}
         [Xhat_Inc, P_Inc] = kalmanFilter(Y, 10, P_0, A, Q, H, R);
-        plot(Xhat, 'b')
+        plot(0:N, [x_0 Xhat], 'b')
         hold all
-        plot(Xhat_Inc, 'r--')
-        plot(X(:,2:end), 'k')
+        plot(0:N, [10 Xhat_Inc], 'r--')
+        plot(0:N, X, 'k')
         legend('Kalman Correct', 'Kalman Incorrect', 'State sequence')
+        xlabel('Sample Number')
+        ylabel('Value')
 end

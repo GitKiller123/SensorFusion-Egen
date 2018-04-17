@@ -1,9 +1,9 @@
 clear all; close all;
-Task = 'c';
+Task = 'b';
 
 N = 20;
 T = 0.01;
-t = linspace(0,T*N,N);
+t = linspace(0,T*(N-1),N);
 
 A = [1 T;
      0 1];
@@ -29,7 +29,7 @@ switch Task
         subplot(2,1,1)
         plot(t,X(1,2:end))
         hold all
-        plot(t,Y)
+        plot(t,Y,'r*')
         legend('True position', 'Measurement')
         xlabel('Time [s]')
         ylabel('Position')
@@ -41,10 +41,10 @@ switch Task
     case {'b'}
         plot(t,X(1,2:end))
         hold all
-        plot(t,Y,'y*')
-        plot(t,Xhat(1,:))
-        plot(t,X(1,2:end)+3*sqrt(R),'b--')
-        plot(t,X(1,2:end)-3*sqrt(R),'b--')
+        plot(t,Y,'r*')
+        plot(t,Xhat(1,:),'k')
+        plot(t,X(1,2:end)+3*sqrt(P(:)'),'b--')
+        plot(t,X(1,2:end)-3*sqrt(P(:)'),'b--')
         legend('True position', 'Measurement', 'Filtered Measurement','3-Sigma level')
         xlabel('Time [s]')
         ylabel('Position')
