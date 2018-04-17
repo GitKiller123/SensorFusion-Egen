@@ -1,5 +1,5 @@
 clear all; close all;
-Task = 'f';
+Task = 'b';
 
 N = 20;
 k = 11;
@@ -61,11 +61,14 @@ switch Task
         plot([Y(:,14) Y(:,14)], [0 0.5],'r--')
         legend('True state', 'Posterior density', 'Measurement')
         figure(3)
+        h = -6:0.01:6;
         Xerror = X(:,2:end) - Xhat;
-        plot(Xerror,'.')
+        Xerror_pdf = normpdf(h,0,cov(Xerror));
+        Xhat_cov = normpdf(h,0,P(:,:,N));
+        plot(h, Xerror_pdf)
         hold all
-        plot([0 N], [3*sqrt(cov(Xerror)) 3*sqrt(cov(Xerror))])
-        legend('Estimation error', '3-Sigma error')
+        plot(h, Xhat_cov)
+        legend('COV of X_{error}', 'COV with P_{N|N}')
     case {'c'}
         z = [min([Xhat(k-1) Xhat(k)])-8:0.01:max([Xhat(k-1) Xhat(k)])+8];
         xpdf_1 = normpdf(z,Xhat(k-1),P(:,:,k-1));
