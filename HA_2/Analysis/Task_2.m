@@ -1,22 +1,22 @@
 clear all; close all;
 Task = 'c';
 
-N = 20;
+N = 20; 
 T = 0.01;
 t = linspace(0,T*(N-1),N);
 
-A = [1 T;
+A = [1 T;       %Our A-Matrix
      0 1];
-H = [1 0];
+H = [1 0];      %Our H-Matrix
 
-q = 1.5;
-Q = [0 0;
+q = 1.5;        %Motion model noise
+Q = [0 0;       %Motion model noise matrix
     0 q];
-R = 2;
+R = 2;          %Measurement noise
 
-x_0 = [1;
+x_0 = [1;       %x_0 mean
        3];
-P_0 =[4 0;
+P_0 =[4 0;      %x_0 covariance
       0 4];
 
 X = genLinearStateSequence(x_0, P_0, A, Q, N);

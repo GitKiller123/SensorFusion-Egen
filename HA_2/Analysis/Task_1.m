@@ -1,23 +1,25 @@
 clear all; close all;
-Task = 'b';
+Task = 'b'; %Variable to decide which task to run
 
-N = 20;
+N = 20;     %Setting the length of our state sequence
 k = 11;
 
-A = 1;
-H = 1;
+A = 1;      %Our A-Matrix (in this case scalar)
+H = 1;      %Our H-Matrix (in this case scalar)
 
-Q = 1.5;
-R = 2.5;
+Q = 1.5;    %Our motion model noise
+R = 2.5;    %measurement noise
 
-x_0 = 2;
-P_0 = 6;
+x_0 = 2;    %Mean of x_0
+P_0 = 6;    %Variance of x_0
 
-X = genLinearStateSequence(x_0, P_0, A, Q, N);
-Y = genLinearMeasurementSequence(X, H, R);
-[Xhat, P, v] = kalmanFilter(Y, x_0, P_0, A, Q, H, R);
+X = genLinearStateSequence(x_0, P_0, A, Q, N);  %Creating our state sequence
+Y = genLinearMeasurementSequence(X, H, R);      %Creating our measurement
+                                                %sequence
+[Xhat, P, v] = kalmanFilter(Y, x_0, P_0, A, Q, H, R); %Filtering our
+                                                      %measurements
 
-switch Task
+switch Task 
     case {'a'}
         plot(X(:,2:end), 'b')
         hold all
@@ -37,6 +39,7 @@ switch Task
         legend('State sequence', 'Kalman', 'Measurement', '3-Sigma')
         xlabel('Sample Number')
         ylabel('Value')
+        %Creating z-values to base our plots on. Considering min/max value
         z = [min([Xhat(4) Xhat(9) Xhat(15)]) - 6:0.01:max([Xhat(4) Xhat(9) Xhat(15)]) + 6];
         XhatPdf_1 = normpdf(z, Xhat(:,4), P(:,:,4));
         XhatPdf_2 = normpdf(z, Xhat(:,9), P(:,:,9));
