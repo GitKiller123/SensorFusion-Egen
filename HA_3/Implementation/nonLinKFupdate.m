@@ -28,14 +28,19 @@ function [x, P] = nonLinKFupdate(x, P, y, h, R, type)
             K = P*Hx'*inv(S);
             
             x = x + K*(y-hx);
+            P = P - K*S*K';
             
         case 'UKF'
             
             [SP,W] = sigmaPoints(x, P, type);
-            y_hat = sum(h(SP)*W',2);
-            P_xy = zeros(length(x));
+            y_hat = [];
+            for i = 1:size(SP,2)
+                y_hat = [y_hat h(SP(:,i))*W(i)];
+            end
+            y_hat = sum(y_hat,2);
+            P_xy = zeros(length(x),length(y_hat));
             S = zeros(length(y_hat));
-            for i = 1:size(SP,2)-1
+            for i = 1:size(SP,2)
                 P_xy = P_xy + (SP(:,i)-x)*(h(SP(:,i))-y_hat)'*W(i);
                 S = S + (h(SP(:,i))-y_hat)*(h(SP(:,i))-y_hat)'*W(i);
             end
@@ -47,10 +52,14 @@ function [x, P] = nonLinKFupdate(x, P, y, h, R, type)
         case 'CKF'
             
             [SP,W] = sigmaPoints(x, P, type);
-            y_hat = sum(h(SP)*W',2);
-            P_xy = zeros(length(x));
+            y_hat = [];
+            for i = 1:size(SP,2)
+                y_hat = [y_hat h(SP(:,i))*W(i)];
+            end
+            y_hat = sum(y_hat,2);
+            P_xy = zeros(length(x),length(y_hat));
             S = zeros(length(y_hat));
-            for i = 1:size(SP,2)-1
+            for i = 1:size(SP,2)
                 P_xy = P_xy + (SP(:,i)-x)*(h(SP(:,i))-y_hat)'*W(i);
                 S = S + (h(SP(:,i))-y_hat)*(h(SP(:,i))-y_hat)'*W(i);
             end

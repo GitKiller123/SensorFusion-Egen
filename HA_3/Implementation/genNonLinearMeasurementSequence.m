@@ -16,7 +16,7 @@ function Y = genNonLinearMeasurementSequence(X, h, R)
 
 n = size(X,2);
 Y = [];
-zero_vec = zeros(size(X,1), 1);
+zero_vec = zeros(size(R,1), 1);
 for k = 2:n
     Y = [Y h(X(:,k))+mvnrnd(zero_vec, R)'];
 end
