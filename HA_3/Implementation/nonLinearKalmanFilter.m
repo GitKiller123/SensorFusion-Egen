@@ -1,4 +1,4 @@
-function [xf, Pf, x_temp, P_temp, vf] = nonLinearKalmanFilter(Y, x_0, P_0, f, Q, h, R, type)
+function [xf, Pf, xp, Pp] = nonLinearKalmanFilter(Y, x_0, P_0, f, Q, h, R, type)
 %NONLINEARKALMANFILTER Filters measurement sequence Y using a 
 % non-linear Kalman filter. 
 %

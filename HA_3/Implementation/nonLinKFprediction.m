@@ -25,7 +25,7 @@ function [x, P] = nonLinKFprediction(x, P, f, Q, type)
     switch type
         case 'EKF'
             [fx, Fx] = f(x);
-            x = fx;
+            x = fx';
             P = Fx*P*Fx' + Q;
 
         case 'UKF'
