@@ -25,22 +25,28 @@ function [x, P] = nonLinKFprediction(x, P, f, Q, type)
     switch type
         case 'EKF'
             [fx, Fx] = f(x);
-            x = fx';
+            x = fx;
             P = Fx*P*Fx' + Q;
 
         case 'UKF'
             
             [SP,W] = sigmaPoints(x, P, type);
-            x = sum(f(SP)*W',2);
+            x = zeros(size(SP,1),1);
+            for i = 1:size(SP,2)
+                x = f(SP(:,i))*W(i) + x;
+            end
             P = zeros(length(x));
-            for i = 1:size(SP,2)-1
+            for i = 1:size(SP,2)
                 P = P + (f(SP(:,i))-x)*(f(SP(:,i))-x)'*W(i);
             end
             P = P + Q;
                 
         case 'CKF'
             [SP,W] = sigmaPoints(x, P, type);
-            x = sum(f(SP)*W',2);
+            x = zeros(size(SP,1),1);
+            for i = 1:size(SP,2)
+                x = f(SP(:,i))*W(i) + x;
+            end
             P = zeros(length(x));
             for i = 1:size(SP,2)
                 P = P + (f(SP(:,i))-x)*(f(SP(:,i))-x)'*W(i);
