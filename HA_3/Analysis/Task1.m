@@ -43,7 +43,8 @@ E_Y2_corr = mean(Y2_corr')';
 Y1_COV_corr = cov(Y1_corr');
 Y2_COV_corr = cov(Y2_corr');
 
-Run_plot = true;
+Run_plot1 = true;
+Run_plot2 = true;
 
 %Task 1b
 for i = 1:3
@@ -51,7 +52,7 @@ for i = 1:3
     [task1.(type{i}).x2, task1.(type{i}).P2] = nonLinKFprediction(x_02, P_02,f, Q, type{i});
     task1.(type{i}).x1corr = ang2pos(task1.(type{i}).x1, s1, s2);
     task1.(type{i}).x2corr = ang2pos(task1.(type{i}).x2, s1, s2);
-    if Run_plot
+    if Run_plot1
         xy_x1 = sigmaEllipse2D(task1.(type{i}).x1, task1.(type{i}).P1, 3);
         xy_y1 = sigmaEllipse2D(E_Y1, Y1_COV, 3);
         xy_x2 = sigmaEllipse2D(task1.(type{i}).x2, task1.(type{i}).P2, 3);
@@ -66,6 +67,8 @@ for i = 1:3
         header = 'Samples and densities for ' + string(type{i}) + ' case 1';
         title(header)
         legend('Measurements','3-Sigma Measurement', 'Approx mean', '3-Sigma Approx')
+        xlabel('x')
+        ylabel('y')
         
         subplot(1,2,2)
                 plot(Y2(1,:),Y2(2,:),'ro')
@@ -76,15 +79,42 @@ for i = 1:3
         header = 'Samples and densities for ' + string(type{i}) + ' case 2';
         title(header)
         legend('Measurements','3-Sigma Measurement', 'Approx mean', '3-Sigma Approx')
+        xlabel('x')
+        ylabel('y')
         
-        hgexport(gcf, ['Task1_fig_B_' type{i} '.jpg'], hgexport('factorystyle'), 'Format', 'fig');
+        hgexport(gcf, ['Task1_fig_B_' type{i} '.eps'], hgexport('factorystyle'), 'Format', 'fig');
     end
 end
 
-
-%Task 1c-e
-%Plot shit, analyze etc.
-
+if Run_plot2
+    figure('units','normalized','outerposition',[0 0 1 1])
+    subplot(1,2,1)
+    
+    plot(Ypos1(1,:),X1(2,:),'*')
+    hold all
+    xy_ycorr1 = sigmaEllipse2D(E_Y1_corr, Y1_COV_corr, 3);
+    plot(xy_ycorr1(1,:),xy_ycorr1(2,:),'r--')    
+    plot(s1(1),s1(2),'o','color',[0 0.5 0])
+    plot(s2(1),s2(2),'o','color',[0 0.5 0])
+    title('Samples vs Measurements 3-Sigma Case 1')
+    legend('Samples', 'Measurement 3-Sigma', 'Sensors')
+    xlabel('x')
+    ylabel('y')
+    
+    subplot(1,2,2)
+    plot(X2(1,:),X2(2,:),'*')
+    hold all
+    xy_ycorr2 = sigmaEllipse2D(E_Y2_corr, Y2_COV_corr, 3);
+    plot(xy_ycorr2(1,:),xy_ycorr2(2,:),'r--')
+    plot(s1(1),s1(2),'o','color',[0 0.5 0])
+    plot(s2(1),s2(2),'o','color',[0 0.5 0])
+    title('Samples vs Measurements 3-Sigma Case 2')
+    legend('Samples', 'Measurement 3-Sigma', 'Sensors')
+    xlabel('x')
+    ylabel('y')
+    hgexport(gcf, ['Task1_fig_C_1.eps'], hgexport('factorystyle'), 'Format', 'fig');
+end
+    
 
 
 
