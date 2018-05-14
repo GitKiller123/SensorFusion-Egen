@@ -1,6 +1,6 @@
 function plotMap(X,Xp,xfp)
-figure(1)
-clf
+% figure(1)
+% clf
 hold on
 plot([1+i 1+9*i 5+9*i])
 plot([7+9*i 11+9*i 11+i 7+i]);plot([5+i 1+i])
@@ -15,10 +15,10 @@ plot([8+2.4*i 8+4*i 10+4*i 10+2.4*i 8+2.4*i])%House 8
 plot([8+1.7*i 8+1.8*i 10+1.8*i 10+1.7*i 8+1.7*i])%House 9
 
 axis([0.8 11.2 0.8 9.2])
-title('A map of the village','FontSize',20)
+% title('A map of the village','FontSize',20)
 
 plot(X(1,:),X(2,:),'-*')
 plot(Xp(1,:),Xp(2,:),'.')
-plot(xfp(1),xfp(2),'r.','MarkerSize',15)
-pause(0.5)
+plot(xfp(1),xfp(2),'g.','MarkerSize',15)
+% pause(0.5)
 end

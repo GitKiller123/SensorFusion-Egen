@@ -26,8 +26,9 @@ if strcmp(task,'e')
 else
     X_kmin1 = mvnrnd(x_0,P_0,N)';
 end
-    
-    W_kmin1 = ones(1,N)./N;
+figure('units','normalized','outerposition',[ 0 0 1 1])
+
+W_kmin1 = ones(1,N)./N;
 for i = 1:size(Y,2)
 
 [X_kmin1, W_kmin1] = pfFilterStep(X_kmin1, W_kmin1, Y(:,i), proc_f, proc_Q, meas_h, meas_R);
@@ -55,12 +56,16 @@ Wp(:,i) = W_kmin1;
 if nargin>9
     if i> 1 && strcmp(plottype,'Trajs')
         plotFunc(i,X_kmin1,Xp(:,:,i-1),W_kmin1,j);
-    elseif i> 1 && strcmp(plottype,'Own')
+    elseif strcmp(plottype,'Own') && mod(i,2) == 1 && i < 41
+        subplot(4,5,(i+1)/2)
+        title('Bicycle trajectory')
         plotFunc(X_kmin1,xfp(:,i));
     end
 end
 
 end
+suptitle('RED = true trajectory, BLUE = Particles and GREEN = particle average')
+hgexport(gcf, ['Task3_' task '.png'], hgexport('factorystyle'), 'Format', 'fig');
 
 
 end

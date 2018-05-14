@@ -141,6 +141,6 @@ if run_plot2
         legend({'True states', 'Measurements','Smoothed states','3-$\sigma$ level'},'Interpreter','Latex')
         xlabel('Position [x]')
         ylabel('Position [y]')
-        hgexport(gcf, 'task_1B_1.png', hgexport('factorystyle'), 'Format', 'png');
+%         hgexport(gcf, 'task_1B_1.png', hgexport('factorystyle'), 'Format', 'png');
     end
 end
