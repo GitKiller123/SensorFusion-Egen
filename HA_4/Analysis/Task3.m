@@ -1,6 +1,6 @@
 clear all; close all;
 load Xk.mat
-task = 'e';
+task = 'a';
 sigma_r = 0.1;
 q = 1;
 R = sigma_r^2*eye(2);
